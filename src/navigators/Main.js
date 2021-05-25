@@ -42,7 +42,7 @@ export default function Main(props) {
         <Stack.Screen options={{ title: '', }} name='Player' component={Player} />
         <Stack.Screen name='SignOut' component={SignOut} />
         <Stack.Screen options={{ title: 'sign in', }} name='Auto' component={Auto} />
-        <Stack.Screen options={{ title: 'sign uo', }} name='Register' component={Register} />
+        <Stack.Screen options={{ title: 'sign up', }} name='Register' component={Register} />
         <Stack.Screen name='Feed' component={Feed} />
       </Stack.Navigator>
     </NavigationContainer>
