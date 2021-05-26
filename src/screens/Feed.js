@@ -12,7 +12,7 @@ export default function Feed({ navigation, route }) {
     {
       id: 123,
       title: "server not responsing:/",
-      link: 'https://v004.radikal.ru/2104/de/6247427436-5-7929355de49ea4595e644a06b6607c51.mp4',
+      link: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
       img: 'https://yt3.ggpht.com/a/AATXAJypGvGk1cqCCPamdgkuDWny84XJfF2e_OI_wteFlQ=s900-c-k-c0xffffffff-no-rj-mo'
     }
   ])

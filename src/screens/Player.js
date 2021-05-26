@@ -27,7 +27,7 @@ export default function Player({ route }) {
           uri: link,
         }}
         useNativeControls
-        resizeMode='cover'
+        resizeMode='contain'
         isLooping
         onPlaybackStatusUpdate={status => setStatus(() => status)}
       />
