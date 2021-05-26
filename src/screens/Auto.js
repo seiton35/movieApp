@@ -8,7 +8,6 @@ export default function Auto({ navigation }) {
   const [autorized, setAutorized] = useState(false)
   const [login, setLogin] = useState('')
   const [id, setId] = useState()
-
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -30,7 +29,6 @@ export default function Auto({ navigation }) {
     setId(autoStatus.id)
     if (autoStatus.status) {
       storeUserData(String(autoStatus.id))
-      console.log("to home params", autoStatus.status, autoStatus.id, login);
       navigation.navigate('Home', { autorized: autoStatus.status, id: autoStatus.id, login })
     }
     else {

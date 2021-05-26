@@ -6,7 +6,6 @@ export default function Feed({ navigation, route }) {
   const [login, setLogin] = useState(route.params.login)
   const [search, setSearch] = useState(false)
   const [history, setHistory] = useState(route.params.history)
-  console.log(id);
   const [videoName, setVideoName] = useState('')
   const [searchbtn, setSearchbtn] = useState(true)
   const [videoList, setVideoList] = useState([
@@ -31,8 +30,6 @@ export default function Feed({ navigation, route }) {
           {login}
         </Text>)
     })
-    // setId(route.params.id)
-    // setHistory(route.params.hystory)
     if (history) {
       navigation.setOptions({ title: 'my history' })
     }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video } from 'expo-av';
 
 export default function Player({ route }) {
   const { userId, link, title, idVideo, history } = route.params

@@ -3,7 +3,6 @@ import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function SignOut({ navigation }) {
 
   async function deleteUserData() {
@@ -11,7 +10,11 @@ export default function SignOut({ navigation }) {
     await AsyncStorage.setItem('id', '')
     await AsyncStorage.setItem('autorized', '')
 
-    navigation.navigate('Home', { autorized: false, id: undefined, login: undefined })
+    navigation.navigate('Home', {
+      autorized: false,
+      id: undefined,
+      login: undefined
+    })
   }
 
   return (
