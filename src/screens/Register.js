@@ -10,7 +10,7 @@ export default function Register({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errMess, seterrMess] = useState('')
 
-  const storeUser = async () => {
+  const storeUser = async (id) => {
     try {
       await AsyncStorage.setItem('id', String(id))
       await AsyncStorage.setItem('login', login)
@@ -27,7 +27,7 @@ export default function Register({ navigation }) {
         const res = await fetch(`http://192.168.1.51:3000/registration?login=${login}&mail=${mail}&password=${password}`)
         const {regStatus, id} = await res.json()
         if (regStatus){
-          storeUser()
+          storeUser(id)
           navigation.navigate('Home',{ autorized: regStatus, id, login })
         }
         else{
