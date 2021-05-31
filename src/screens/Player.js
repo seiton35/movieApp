@@ -1,16 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, Text, ScrollView, TextInput } from 'react-native'
+import { View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
 import { Video } from 'expo-av';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Player({ route }) {
   const { userId, link, title, idVideo, history } = route.params
   const video = useRef(null);
   const [status, setStatus] = useState({});
   const [comment, setComment] = useState('');
+  const [commentList, setCommentList] = useState([])
+  const [commentStatusChanged, setCommentStatusChanged] = useState(true)
+
+  console.log("render");
 
   useEffect(() => {
     saveToHystory()
   }, [idVideo])
+
+  useEffect(() => {
+    takeCommentList()
+  }, [commentStatusChanged])
+
+  async function takeCommentList() {
+    const res = await fetch(`http://192.168.1.51:3000/getComments?&videoId=${idVideo}`)
+    const commentList = await res.json()
+    setCommentList(commentList)
+  }
 
   async function saveToHystory() {
     if (userId >= 0 && !history) {
@@ -22,7 +37,11 @@ export default function Player({ route }) {
     if (userId >= 0) {
       const comReg = /\w/
       if (comment.match(comReg)) {
-        await fetch(`http://192.168.1.51:3000/sendComment?userId=${userId}&idVideo=${idVideo}&comment=${comment}`)
+        const res = await fetch(`http://192.168.1.51:3000/sendComment?userId=${userId}&idVideo=${idVideo}&comment=${comment}`)
+        if (res.status >= 200 && res.status < 300) {
+          setComment('')
+          setCommentStatusChanged(!commentStatusChanged)
+        }
       }
     }
   }
@@ -30,7 +49,6 @@ export default function Player({ route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>{title}</Text>
         <Video
           ref={video}
           style={styles.video}
@@ -42,26 +60,48 @@ export default function Player({ route }) {
           isLooping
           onPlaybackStatusUpdate={status => setStatus(() => status)}
         />
-        <View style={styles.hiCommentContainer}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.leaveCommentContainer}>
           {
             userId >= 0
               ?
-              <TextInput
-                style={styles.commentInput}
-                // multiline
-                placeholder="leave a comment"
-                value={comment}
-                onChangeText={setComment}
-                onSubmitEditing={leaveComment}
-              />
+              < View style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.commentInput}
+                  multiline
+                  placeholder="leave a comment"
+                  value={comment}
+                  onChangeText={setComment}
+                // onSubmitEditing={leaveComment}
+                />
+                <TouchableOpacity 
+                style={styles.commentSubmitBtn}
+                onPress={leaveComment}
+                >
+                  <MaterialCommunityIcons name="comment-arrow-right-outline" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
               :
               <Text style={styles.commentInput}>
                 to leave comments, enter your profile
               </Text>
           }
         </View>
+        <View style={styles.commentList}>
+          {
+            commentList.map((item, index) => {
+              const { datetime, id, id_user, id_video, text } = item
+              return (
+                <View style={styles.commentViewContaner} key={index}>
+                  <Text style={styles.commentViewText}>{text}</Text>
+                  <Text style={styles.commentViewDatetime}>{datetime}</Text>
+                </View>
+              )
+            })
+          }
+        </View>
       </ScrollView>
-    </View>
+    </View >
   )
 }
 
@@ -70,25 +110,39 @@ const styles = StyleSheet.create({
     flex: 1
   },
   title: {
-    fontSize: 23,
+    fontSize: 25,
     paddingLeft: 20,
   },
   video: {
-    height: 400,
+    height: 220,
+    width: '100%'
   },
-  CommentContainer: {
-    height: 600,
+  leaveCommentContainer: {
     width: '100%',
     paddingLeft: 10,
-    backgroundColor: 'brown'
+    backgroundColor: '#2222',
   },
   commentInput: {
-    width: 375,
+    width: '90%',
     paddingLeft: 5,
     paddingBottom: 5,
     paddingTop: 5,
-    backgroundColor: 'green',
     fontSize: 20,
+  },
+  commentSubmitBtn:{
+    paddingTop: 5,
+
+  },
+  commentList: {},
+  commentViewContaner: {
+    flexDirection: 'row',
+  },
+  commentViewText: {
+    fontSize: 20
+  },
+  commentViewDatetime: {
+    fontSize: 20
   }
+
 
 })
