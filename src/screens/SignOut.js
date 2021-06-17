@@ -20,7 +20,7 @@ export default function SignOut({ navigation }) {
   return (
     <View style={styles.form}>
       <View style={styles.formView}>
-        <Text style={styles.text}>Sign out?</Text>
+        <Text style={styles.text}>Log out?</Text>
       </View>
 
       <View style={styles.buttonContainer}>

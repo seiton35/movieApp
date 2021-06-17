@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -23,15 +23,17 @@ export default function Auto({ navigation }) {
   }
 
   async function signIn() {
-    const res = await fetch(`http://192.168.1.51:3000/auto?login='${login}'&password='${password}'`)
+    const res = await fetch(`http://192.168.1.51:3000/auto?login='${login}'&password=${password}`)
     const autoStatus = await res.json()
     setAutorized(autoStatus.status)
     setId(autoStatus.id)
     if (autoStatus.status) {
       storeUserData(String(autoStatus.id))
       navigation.navigate('Home', { autorized: autoStatus.status, id: autoStatus.id, login })
+      ToastAndroid.show(`You has joined as ${login}!`, 2000)
     }
     else {
+      ToastAndroid.show(`uncorrect!`, 2000)
       setErrorMessage('uncorect password or login')
       setPassword('')
     }
@@ -66,6 +68,7 @@ export default function Auto({ navigation }) {
             onChangeText={setPassword}
             secureTextEntry={true}
             maxLength={20}
+            onEndEditing={() => { signIn }}
           />
         </View>
         <Text
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   tochButton: {
-    height:30,
+    height: 30,
     backgroundColor: '#5555',
     alignItems: 'flex-end',
     justifyContent: 'center',
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 50,
-    color:'black',
+    color: 'black',
     fontSize: 22,
     fontWeight: 'bold'
   },

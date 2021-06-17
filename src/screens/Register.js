@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Button, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Button, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -21,14 +21,16 @@ export default function Register({ navigation }) {
     }
   }
 
-  async function Registration() {
+  async function registration() {
     if (confirmPassword == password) {
       if (login != '' || mail != '' || password != '') {
+        console.log('reg');
         const res = await fetch(`http://192.168.1.51:3000/registration?login=${login}&mail=${mail}&password=${password}`)
         const {regStatus, id} = await res.json()
         if (regStatus){
           storeUser(id)
           navigation.navigate('Home',{ autorized: regStatus, id, login })
+          ToastAndroid.show(`You has joined as ${login}!`,2000)
         }
         else{
           seterrMess('uncorrect data!')
@@ -84,6 +86,7 @@ export default function Register({ navigation }) {
           onChangeText={setConfirmPassword}
           secureTextEntry={true}
           maxLength={20}
+          onEndEditing={()=>{registration}}
         />
         <Text style={styles.errMess}>{errMess}</Text>
       </View>
@@ -91,7 +94,7 @@ export default function Register({ navigation }) {
         <Button
           title='confirm'
           color='#2c2c2c'
-          onPress={Registration}
+          onPress={registration}
         />
       </View>
     </View>

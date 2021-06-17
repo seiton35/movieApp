@@ -11,7 +11,7 @@ export default function Player({ route }) {
   const [commentList, setCommentList] = useState([])
   const [commentStatusChanged, setCommentStatusChanged] = useState(true)
 
-  console.log("render");
+  console.log(userId);
 
   useEffect(() => {
     saveToHystory()
@@ -94,7 +94,7 @@ export default function Player({ route }) {
               return (
                 <View style={styles.commentViewContaner} key={index}>
                   <Text style={styles.commentViewText}>{text}</Text>
-                  <Text style={styles.commentViewDatetime}>{datetime}</Text>
+                  {/* <Text style={styles.commentViewDatetime}>{datetime}</Text> */}
                 </View>
               )
             })
@@ -133,7 +133,9 @@ const styles = StyleSheet.create({
     paddingTop: 5,
 
   },
-  commentList: {},
+  commentList: {
+    paddingLeft:15
+  },
   commentViewContaner: {
     flexDirection: 'row',
   },
